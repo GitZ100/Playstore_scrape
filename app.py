@@ -4,28 +4,29 @@ from bs4 import BeautifulSoup
 import requests
 from google_play_scraper import app
 from flask_pymongo import pymongo
+import os
+from dotenv import load_dotenv
+
+import os
+
+# Load environment variables from the .env file
+load_dotenv()
+
+# Access the environment variables using the os module
+USER = os.getenv('MONGO_USERNAME')
+PASS = os.getenv('MONGO_PASS')
 
 app1 = Flask(__name__)
 
-client = pymongo.MongoClient("mongodb+srv://zagitmail01:EPI485o4hihdTTEq@megamind.v6m4xku.mongodb.net/?retryWrites=true&w=majority")
+client = pymongo.MongoClient(f"mongodb+srv://{USER}:{PASS}@megamind.v6m4xku.mongodb.net/?retryWrites=true&w=majority")
 db = client.get_database("megamind")
 user_collection = pymongo.collection.Collection(db, 'user_collection')
 # megamind
 
 @app1.route('/')
 def index():
-  URL = "https://play.google.com/store/games?hl=en&gl=US&pli=1"
-  page = requests.get(URL)
-  soup = BeautifulSoup(page.content, "html.parser")
-  job_elements = soup.find_all("a", class_="Si6A0c Gy4nib")
-  appinfolst = []
-
-  for result in job_elements:
-    # print(result['href'][23:], end="\n" * 2)
-    # print(type(result['href']))
-    appinfo = app(result['href'][23:], lang= 'en', country='us')
-    appinfolst.append(appinfo)
-    # print(appinfo, end='\n'*2)
+  appinfolst = db.collection.find({})
+  print("___________________________________________________",appinfolst)
   return render_template('index.html', all_datas=appinfolst)
 
 @app1.route('/details')
