@@ -27,9 +27,12 @@ def index():
   lst_dict=json.loads(json_string)
   return render_template('index.html', all_datas=lst_dict)
 
-@app1.route('/details')
-def details():
-  return "details Page"
+@app1.route('/details/<ID>')
+def details(ID):
+    print(ID)
+    detail = db.collection.find_one({'appId':ID})
+    print(detail)
+    return render_template('detail.html', detail=detail) 
 # @app1.route('/packages')
 # def packages():
 #   URL = "https://play.google.com/store/games?hl=en&gl=US&pli=1"
