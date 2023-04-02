@@ -1,12 +1,8 @@
-from datetime import datetime
-from flask import Flask, render_template, request, redirect
-from bs4 import BeautifulSoup
-import requests
-from google_play_scraper import app
+from flask import Flask, render_template, request, redirect, jsonify, json
 from flask_pymongo import pymongo
+from bson.json_util import dumps
 import os
 from dotenv import load_dotenv
-
 import os
 
 # Load environment variables from the .env file
@@ -26,8 +22,10 @@ user_collection = pymongo.collection.Collection(db, 'user_collection')
 @app1.route('/')
 def index():
   appinfolst = db.collection.find({})
-  print("___________________________________________________",appinfolst)
-  return render_template('index.html', all_datas=appinfolst)
+  infolst = list(appinfolst)
+  json_string=dumps(infolst)
+  lst_dict=json.loads(json_string)
+  return render_template('index.html', all_datas=lst_dict)
 
 @app1.route('/details')
 def details():
