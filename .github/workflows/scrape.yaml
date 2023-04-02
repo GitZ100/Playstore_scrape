@@ -9,14 +9,12 @@ on:
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    env:
+        MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
+        MONGO_PASS : ${{ secrets.MONGO_PASS }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      env:
-        MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
-        MONGO_PASS : ${{ secrets.MONGO_PASS }}
-
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
